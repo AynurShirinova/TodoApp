@@ -26,7 +26,8 @@ public class TodoServiceTest {
     @Test
     public void testAddTask() {
         // Given
-        Todo todoToAdd = new Todo("Task to add");
+        Todo todoToAdd = new Todo();
+        todoToAdd.setDescription("test1");
 
         // When
         todoService.addTask(todoToAdd);
