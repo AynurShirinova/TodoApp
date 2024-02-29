@@ -13,8 +13,8 @@ public class Main {
     TodoRepository repository = new TodoRepository();
     ProjectRepository projectRepository = new ProjectRepository();
 
-    TodoService todoService = new TodoService(repository);
     UserService userService=new UserService();
+    TodoService todoService = new TodoService(repository,userService);
     public TodoController todoController = new TodoController(todoService);
     public ProjectService projectService = new ProjectService(projectRepository, todoService);
 

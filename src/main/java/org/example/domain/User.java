@@ -9,12 +9,14 @@ import java.util.UUID;
 public class User {
     UUID id;
     private String userName;
+   // private String mail;
     private String password;
 @Builder
-    public User(String userName, String password) {
-        this.userName = userName;
-        this.password = password;
+    public User(String password, String userName,UUID id) {
         this.id = UUID.randomUUID();
+        this.password = password;
+       // this.mail=mail;
+        this.userName = userName;
     }
 
 }

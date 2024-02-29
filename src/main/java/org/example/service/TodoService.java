@@ -3,28 +3,47 @@ package org.example.service;
 import org.example.domain.Database;
 import org.example.domain.Status;
 import org.example.domain.Todo;
+import org.example.domain.User;
 import org.example.repository.TodoRepository;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+
+import java.util.*;
+
 @SuppressWarnings("ALL")
 
 public class TodoService {
-    private static  TodoRepository todoRepository;
+    private TodoRepository todoRepository;
     private Scanner scanner = new Scanner(System.in);
+    private UserService userService;
 
-    public TodoService(TodoRepository todoRepository) {
+    public TodoService(TodoRepository todoRepository, UserService userService) {
         this.todoRepository = todoRepository;
+        this.userService = userService;
     }
 
+    public UUID getUserIdByEmail(String email) {
+        return userService.getUserIdByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + email));
+    }
+
+
+    //String userIdstr= userId.toString();
     public void addTask() {
+
         System.out.println("task or subtask?");
         String tasks = scanner.nextLine();
+       // String mail;
         try {
+
             if (tasks.equals("task") ) {
-                System.out.println("Enter assignedTo:");
-                String assignedTo = scanner.nextLine();
-                if (Database.USERS.stream().anyMatch(u -> u.getUserName().equals(assignedTo))) {
+                System.out.println("Enter user email:");
+                String email = scanner.nextLine();
+                UUID userId = getUserIdByEmail(email);
+                System.out.println("User ID: " + userId);
+                System.out.println("Taski assign elemek istediyiniz id ni daxil edin");
+                String uuidstring = scanner.nextLine();
+                UUID assignedTo = UUID.fromString(uuidstring);
+                if (userId.equals(assignedTo)){
+                    System.out.println("salaam");
                 } else {
                     System.out.println("bele user yoxdur");
                 }
@@ -34,7 +53,12 @@ public class TodoService {
                 System.out.println("Enter description:");
                 String description = scanner.nextLine();
 
-                Todo newTodo = Todo.builder().build();
+                Todo newTodo = Todo.builder()
+                        .assignedTo(assignedTo.toString())
+                        .title(title)
+                        .description(description)
+                        //.createdBy()
+                        .build();
 
                 todoRepository.addTodo(newTodo);
             } else if (tasks.equals("subtask")) {
