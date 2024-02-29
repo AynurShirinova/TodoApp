@@ -3,14 +3,14 @@ import org.example.Main;
 import org.example.domain.Constants;
 import org.example.domain.Session;
 import org.example.domain.User;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 @SuppressWarnings("ALL")
 
 public class UserService {
+    UUID id = UUID.randomUUID();
     private final Scanner scanner = new Scanner(System.in);
   private static Session session;
     public void loging() {
@@ -23,10 +23,10 @@ public class UserService {
             choice = scanner.nextLine().trim();
             switch (choice) {
                 case "1":
-                    this.logIn();
+                    this.logIn(id);
                     break;
                 case "2":
-                    this.logUp();
+                    this.logUp(id);
                     break;
                 case "0":
                     System.out.println("Exiting program. Goodbye!");
@@ -36,11 +36,14 @@ public class UserService {
             }
             System.out.println("-----------------------");
         } while (!choice.equals("0"));
+
     }
-    private Map<String, User> userCredentials = new HashMap<>();
+    public static Map<String, User> userCredentials = new HashMap<>();
 
 
-
+    public UUID returnId(UUID id){
+        return id;
+    }
 
     public boolean isValidEmail(String email) {
         final Pattern pattern = Pattern.compile(Constants.EMAIL_REGEX);
@@ -51,7 +54,7 @@ public class UserService {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
-    public boolean register(String email, String password) {
+    public boolean register(String email, String password,String username,UUID id) {
         if (!isValidEmail(email)) {
             return false;
         }
@@ -59,20 +62,29 @@ public class UserService {
             return false; // E-posta zaten kayıtlı
         }
 
-        userCredentials.put(email, new User(email, password));
+        userCredentials.put(email, new User(password, username,id));
         return true;
     }
 
-    public boolean authenticate(String email, String password) {
+    public UUID authenticateAndGetId(String email, String password) {
         if (!isValidEmail(email)) {
-            return false;
+            return null; // Invalid email format
         }
         User user = userCredentials.get(email);
-        return user != null && user.getPassword().equals(password);
+        if (user != null && user.getPassword().equals(password)) {
+            return user.getId(); // Return the user's ID on successful authentication
+        }
+        return null; //
+    }
+    public Optional<UUID> getUserIdByEmail(String email) {
+        if (email == null || !userCredentials.containsKey(email)) {
+            return Optional.empty(); // User not found or email is null
+        }
+        return Optional.ofNullable(userCredentials.get(email).getId());
     }
 
 
-    public void logUp() {
+    public void logUp(UUID id) {
 //try {
 //
 //    System.out.println("Enter your Username");
@@ -90,17 +102,20 @@ public class UserService {
 //e.printStackTrace();
         System.out.print("Kayıt için e-posta giriniz: ");
         String email = scanner.nextLine();
+        System.out.print("Kayıt için username giriniz: ");
+        String username = scanner.nextLine();
         System.out.print("Şifre giriniz: ");
         String password = scanner.nextLine();
 
-        if (register(email, password)) {
+
+        if (register(email, password,username,id)) {
             System.out.println("Kayıt başarılı. Giriş yapabilirsiniz.");
         } else {
             System.out.println("Kayıt başarısız. E-posta zaten kullanımda veya geçersiz.");
         }
     }
 
-    public void logIn() {
+    public void logIn(UUID id) {
 //        System.out.println("enter your username");
 //        String username = scanner.nextLine().trim();
 //        Session.setCurrentUserName(username);
@@ -124,13 +139,20 @@ public class UserService {
         System.out.print("Şifre giriniz: ");
         String password = scanner.nextLine();
 
-        if (authenticate(email, password)) {
+        UUID userId = authenticateAndGetId(email, password);
+        if (userId != null) {
             System.out.println("Giriş başarılı.");
-//             new Main().todoController.run();
-            new Main().projectService.manageProjects();
+            System.out.println("User ID: " + userId);
+            new Main().todoController.run();
+            // Proceed with logged-in user operations
         } else {
             System.out.println("Yanlış kullanıcı adı veya şifre.");
         }
+
+
+
+
+
 
 
     }
