@@ -10,7 +10,8 @@ import java.util.UUID;
 @Setter
 public class Todo {
     UUID id;
-    private String projectİD;
+    UUID fkUserId;
+    private String projectId;
     private String title;
     private String description;
     private String createdBy;
@@ -20,9 +21,10 @@ public class Todo {
     private String created;
 
     @Builder
-    public Todo(String projectİD,String title, String description, String createdBy, String assignedTo, Status status, String priority, String created) {
+    public Todo(String projectİD,String title, String description, String createdBy, String assignedTo, Status status, String priority, String created,UUID fkUserId) {
         this.id = UUID.randomUUID();
-        this.projectİD=projectİD;
+        this.fkUserId=fkUserId;
+        this.projectId=projectİD;
         this.assignedTo = assignedTo;
         this.created = created;
         this.createdBy = createdBy;
