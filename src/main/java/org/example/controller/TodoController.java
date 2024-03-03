@@ -18,6 +18,7 @@ public class TodoController {
                 System.out.println("2. Delete Task");
                 System.out.println("3. Update Task");
                 System.out.println("4. Read Tasks");
+                System.out.println("5. Get Tasks By UserId ");
                 System.out.println("0. Exit");
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextLine().trim();
@@ -34,6 +35,9 @@ public class TodoController {
                         break;
                     case "4":
                         todoService.readTasks();
+                        break;
+                    case "5":
+                   //     todoService.readTasks();
                         break;
                     case "0":
                         System.out.println("Exiting program. Goodbye!");

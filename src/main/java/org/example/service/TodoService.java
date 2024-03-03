@@ -1,12 +1,13 @@
 package org.example.service;
 
-import org.example.domain.Database;
 import org.example.domain.Status;
 import org.example.domain.Todo;
 import org.example.domain.User;
 import org.example.repository.TodoRepository;
 
 import java.util.*;
+
+import static org.example.service.UserService.userCredentials;
 
 @SuppressWarnings("ALL")
 
@@ -26,7 +27,6 @@ public class TodoService {
     }
 
 
-    //String userIdstr= userId.toString();
     public void addTask() {
 
         System.out.println("task or subtask?");
@@ -38,12 +38,12 @@ public class TodoService {
                 System.out.println("Enter user email:");
                 String email = scanner.nextLine();
                 UUID userId = getUserIdByEmail(email);
+
                 System.out.println("User ID: " + userId);
                 System.out.println("Taski assign elemek istediyiniz id ni daxil edin");
                 String uuidstring = scanner.nextLine();
                 UUID assignedTo = UUID.fromString(uuidstring);
                 if (userId.equals(assignedTo)){
-                    System.out.println("salaam");
                 } else {
                     System.out.println("bele user yoxdur");
                 }
@@ -57,7 +57,7 @@ public class TodoService {
                         .assignedTo(assignedTo.toString())
                         .title(title)
                         .description(description)
-                        //.createdBy()
+                        .fkUserId(userId)
                         .build();
 
                 todoRepository.addTodo(newTodo);
@@ -76,7 +76,8 @@ public class TodoService {
                 System.out.println("Enter description:");
                 String description = scanner.nextLine();
 
-                Todo newTodo = Todo.builder().build();
+                Todo newTodo = Todo.builder()
+                        .build();
                 todoRepository.addTodo(newTodo);
            }
         } catch (IllegalArgumentException e) {
@@ -88,7 +89,6 @@ public class TodoService {
         System.out.println("Enter the ID of the task you want to delete:");
         String idString = scanner.nextLine();
         UUID id = UUID.fromString(idString);
-
         todoRepository.deleteTodo(id);
         System.out.println("Task deleted successfully.");
     }
@@ -151,7 +151,7 @@ public class TodoService {
            public List<Todo> readTasks () {
                List<Todo> tasks = todoRepository.readTasks();
                tasks.forEach(t -> {
-                   System.out.println("id: " + t.getId() + " assignedTo: " + t.getAssignedTo() + " Title: " + t.getTitle() + "," + "Description: " + t.getDescription() + "  createdBy: " + t.getCreatedBy() + " status: " + t.getStatus());
+                   System.out.println("taskId: " + t.getId() + " assignedTo: " + t.getAssignedTo() + " Title: " + t.getTitle() + "," + "Description: " + t.getDescription() + "  createdBy: " + t.getCreatedBy() + " status: " + t.getStatus());
                });
                return todoRepository.readTasks();
            }
