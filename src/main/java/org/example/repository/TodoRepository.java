@@ -1,9 +1,15 @@
 package org.example.repository;
 import org.example.domain.Todo;
+import org.example.domain.User;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.example.service.UserService.userCredentials;
+
 @SuppressWarnings("ALL")
 
 public class TodoRepository   {
@@ -47,4 +53,13 @@ public class TodoRepository   {
                 .filter(todo -> todo.getId().equals(id))
                 .findFirst();
     }
+
+    public List<Todo> getTaskByFkUserId(UUID id) {
+        return getTodoList().stream()
+                .filter(todo -> todo.getFkUserId().equals(id))
+                .collect(Collectors.toList());
+    }
+
+
+
 }
