@@ -59,7 +59,7 @@ public class UserService {
             return false;
         }
         if (userCredentials.containsKey(email)) {
-            return false; // E-posta zaten kayıtlı
+            return false;
         }
 
         userCredentials.put(email, new User(password, username,id));
@@ -68,23 +68,25 @@ public class UserService {
 
     public UUID authenticateAndGetId(String email, String password) {
         if (!isValidEmail(email)) {
-            return null; // Invalid email format
+            return null;
         }
         User user = userCredentials.get(email);
         if (user != null && user.getPassword().equals(password)) {
-            return user.getId(); // Return the user's ID on successful authentication
+            return user.getId();
         }
-        return null; //
+        return null;
     }
     public Optional<UUID> getUserIdByEmail(String email) {
         if (email == null || !userCredentials.containsKey(email)) {
-            return Optional.empty(); // User not found or email is null
+            return Optional.empty();
         }
         return Optional.ofNullable(userCredentials.get(email).getId());
     }
 
 
+
     public void logUp(UUID id) {
+
 //try {
 //
 //    System.out.println("Enter your Username");
