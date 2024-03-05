@@ -62,14 +62,14 @@ public class TodoService {
                 System.out.println("Başlangıç tarihini girin (gg/aa/yyyy):");
                 String createdİnput = scanner.nextLine();
                 LocalDate created = LocalDate.parse(createdİnput, dateFormatter);
-
+                Status status = Status.PROGRESS;
                 Todo newTodo = Todo.builder()
                         .assignedTo(assignedTo)
                         .created(created)
                         .title(title)
                         .description(description)
                         .createdBy(username)
-                        // .status("Active")
+                        .status(status)
                         .build();
 
                 todoRepository.addTodo(newTodo);
@@ -91,8 +91,8 @@ public class TodoService {
                         .assignedTo(assignedTo)
                         .title(title)
                         .description(description)
-                        //    .createdBy(username)
-                        // .status("Active")
+//                        .createdBy(username)
+//                        .status(status)
                         .build();
                 todoRepository.addTodo(newTodo);
             }
