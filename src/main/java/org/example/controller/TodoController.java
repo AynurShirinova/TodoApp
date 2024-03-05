@@ -19,6 +19,7 @@ public class TodoController {
                 System.out.println("3. Update Task");
                 System.out.println("4. Read Tasks");
                 System.out.println("5. Get Tasks By UserId ");
+                System.out.println("6. task between 2 date ");
                 System.out.println("0. Exit");
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextLine().trim();
@@ -37,7 +38,10 @@ public class TodoController {
                         todoService.readTasks();
                         break;
                     case "5":
-                   //     todoService.readTasks();
+                        todoService.listTasksByAssignedTo();
+                        break;
+                    case "6":
+                        todoService.askUserForDateRangeAndPrintTodos();
                         break;
                     case "0":
                         System.out.println("Exiting program. Goodbye!");
