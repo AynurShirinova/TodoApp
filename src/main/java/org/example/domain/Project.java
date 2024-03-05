@@ -15,7 +15,7 @@ public class Project {
    private String createdAt;
 @Builder
     public Project( UUID id,  String title,String description,String createdAt) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.title = title;
         this.createdAt=createdAt;
         this.description=description;
