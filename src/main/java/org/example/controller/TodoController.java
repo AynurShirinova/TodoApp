@@ -44,7 +44,7 @@ public class TodoController {
                         todoService.askUserForDateRangeAndPrintTodos();
                         break;
                     case "0":
-                        System.out.println("Exiting program. Goodbye! Spring");
+                        System.out.println("Exiting program. Goodbye! Sprinhg");
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
