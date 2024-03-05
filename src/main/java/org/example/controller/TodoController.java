@@ -24,6 +24,7 @@ public class TodoController {
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextLine().trim();
 
+
                 switch (choice) {
                     case "1":
                         todoService.addTask();

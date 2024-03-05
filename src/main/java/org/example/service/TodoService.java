@@ -24,6 +24,7 @@ public class TodoService {
         this.userService = userService;
     }
 
+
     public UUID getUserIdByEmail(String email) {
         return userService.getUserIdByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + email));
@@ -97,6 +98,7 @@ public class TodoService {
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid status. Please enter task or subtask.");
+
         }
     }
     public void deleteTask(Scanner scanner) {
