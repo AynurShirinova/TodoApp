@@ -3,6 +3,8 @@ package org.example.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDate;
 import java.util.UUID;
 
 @SuppressWarnings("ALL")
@@ -15,13 +17,13 @@ public class Todo {
     private String title;
     private String description;
     private String createdBy;
-    private String assignedTo;
+    private UUID assignedTo;
     private Status status;
     private String priority;
-    private String created;
+    private LocalDate created;
 
     @Builder
-    public Todo(String projectİD,String title, String description, String createdBy, String assignedTo, Status status, String priority, String created,UUID fkUserId) {
+    public Todo(String projectİD,String title, String description, String createdBy, UUID assignedTo, Status status, String priority, LocalDate created,UUID fkUserId) {
         this.id = UUID.randomUUID();
         this.fkUserId=fkUserId;
         this.projectId=projectİD;
