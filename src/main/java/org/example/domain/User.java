@@ -12,7 +12,7 @@ public class User {
    // private String mail;
     private String password;
 @Builder
-    public User(String password, String userName,UUID id) {
+    public User(String password, String userName, UUID id, String email) {
         this.id = UUID.randomUUID();
         this.password = password;
        // this.mail=mail;
