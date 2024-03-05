@@ -23,7 +23,7 @@ public class TodoService {
 
     public UUID getUserIdByEmail(String email) {
         return userService.getUserIdByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + email));
+                .orElseThrow(() -> new IllegalArgumentException("User not found for email: aynur" + email));
     }
 
 
