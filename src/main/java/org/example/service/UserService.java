@@ -10,42 +10,12 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
-
 public class UserService {
-    UUID id = UUID.randomUUID();
     private final Scanner scanner = new Scanner(System.in);
     private static Session session;
-    public void loging() {
-        String choice;
-        do {
-            System.out.println("1.log in");
-            System.out.println("2. log up");
-            System.out.println("0. Exit");
-            System.out.print("Enter your choice: ");
-            choice = scanner.nextLine().trim();
-            switch (choice) {
-                case "1":
-                    this.logIn(id);
-                    break;
-                case "2":
-                    this.logUp(id);
-                    break;
-                case "0":
-                    System.out.println("Exiting program. Goodbye!");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-            System.out.println("-----------------------");
-        } while (!choice.equals("0"));
+    public  UserService(){};
 
-    }
     public static Map<String, User> userCredentials = new HashMap<>();
-
-
-    public UUID returnId(UUID id){
-        return id;
-    }
 
     public boolean isValidEmail(String email) {
         final Pattern pattern = Pattern.compile(Constants.EMAIL_REGEX);
@@ -64,7 +34,11 @@ public class UserService {
             return false; // E-posta zaten kayıtlı
         }
 
-        userCredentials.put(email,new User(password, userName,id,email));
+        userCredentials.put(email, User.builder()
+                        .mail(email)
+                        .id(id)
+                        .userName(userName)
+                .build());
         return true;
     }
 
@@ -97,9 +71,6 @@ public class UserService {
         }
         return userCredentials.get(uuid).getUserName();
     }
-
-
-
     public static List<UUID> getAllUserIds() {
         // Check if the userCredentials map is not null or empty
         if (userCredentials == null || userCredentials.isEmpty()) {
@@ -119,7 +90,6 @@ public class UserService {
             return emails;
         }
 
-
         for (Map.Entry<String, User> entry : userCredentials.entrySet()) {
             String email = entry.getKey();
             User user = entry.getValue();
@@ -128,7 +98,6 @@ public class UserService {
                 emails.add(email);
             }
         }
-
         return emails;
     }
 
@@ -140,7 +109,6 @@ public class UserService {
         String userName = scanner.nextLine();
         System.out.print("Şifre giriniz: ");
         String password = scanner.nextLine();
-
 
         if (register(email, password,userName,id)) {
             System.out.println("Kayıt başarılı. Giriş yapabilirsiniz.");
@@ -159,17 +127,9 @@ public class UserService {
         if (userId != null) {
             System.out.println("Giriş başarılı.");
             System.out.println("User ID: " + userId);
-//            new Main().todoController.run();
-            new Main().projectService.manageProjects();
+            new Main().projectController.manageProjects();
         } else {
             System.out.println("Yanlış kullanıcı adı veya şifre.");
         }
-
-
-
-
-
-
-
     }
 }
