@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("ALL")
 
 public class TodoService {
+    private final String TASK="task";
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final TodoRepository todoRepository;
     private final Scanner scanner = new Scanner(System.in);
@@ -36,7 +37,7 @@ public class TodoService {
         try {
 
             UUID assignedTo = null;
-            if (tasks.equals("task")) {
+            if (tasks.equals(TASK)) {
                 for (int i = 0; i < uuids.size(); i++) {
                     UUID uuid = uuids.get(i);
                     String emailfor = emails.get(i);
