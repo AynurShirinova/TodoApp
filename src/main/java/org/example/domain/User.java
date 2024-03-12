@@ -1,5 +1,6 @@
 package org.example.domain;
 
+
 import lombok.Builder;
 import lombok.Getter;
 

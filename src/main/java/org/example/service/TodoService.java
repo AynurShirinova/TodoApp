@@ -24,6 +24,7 @@ public class TodoService {
         this.userService = userService;
     }
 
+
     public UUID getUserIdByEmail(String email) {
         return userService.getUserIdByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found for email: " + email));
@@ -61,13 +62,17 @@ public class TodoService {
                 System.out.println("Başlangıç tarihini girin (gg/aa/yyyy):");
                 String createdİnput = scanner.nextLine();
                 LocalDate created = LocalDate.parse(createdİnput, dateFormatter);
-
+                Status status = Status.PROGRESS;
                 Todo newTodo = Todo.builder()
                         .assignedTo(assignedTo)
                         .created(created)
                         .title(title)
                         .description(description)
                         .createdBy(username)
+
+
+                        .status(status)
+
                         .build();
 
                 todoRepository.addTodo(newTodo);
@@ -89,13 +94,14 @@ public class TodoService {
                         .assignedTo(assignedTo)
                         .title(title)
                         .description(description)
-                        //    .createdBy(username)
-                        // .status("Active")
+//                        .createdBy(username)
+//                        .status(status)
                         .build();
                 todoRepository.addTodo(newTodo);
             }
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid status. Please enter task or subtask.");
+
         }
     }
     public void deleteTask(Scanner scanner) {
