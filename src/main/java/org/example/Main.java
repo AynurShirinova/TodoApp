@@ -14,13 +14,12 @@ import org.example.service.UserService;
 public class Main {
     TodoRepository repository = new TodoRepository();
     ProjectRepository projectRepository = new ProjectRepository();
-
     UserService userService=new UserService();
     TodoService todoService = new TodoService(repository,userService);
     public TodoController todoController = new TodoController(todoService);
     public ProjectService projectService = new ProjectService(projectRepository, todoService);
-   public ProjectController projectController = new ProjectController(projectService, projectRepository);
-   public UserController userController = new UserController(userService);
+    public ProjectController projectController = new ProjectController(projectService, projectRepository);
+    public UserController userController = new UserController(userService);
 
     public static void main(String[] args) {
         new Main().userController.loging();

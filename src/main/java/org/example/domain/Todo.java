@@ -1,17 +1,26 @@
 package org.example.domain;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@SuppressWarnings("ALL")
-@Getter
-@Setter
+//@SuppressWarnings("ALL")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Data
+@Table
 public class Todo {
+    @Id
     UUID id;
     UUID fkUserId;
     private String projectId;
@@ -23,13 +32,4 @@ public class Todo {
     private String priority;
     private LocalDate created;
 
-    @Override
-    public String toString() {
-        return "Todo{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", created=" + created +
-                '}';
-    }
 }
