@@ -7,17 +7,13 @@ import lombok.Getter;
 import java.util.UUID;
 @SuppressWarnings("ALL")
 @Getter
+@Builder
 public class User {
     UUID id;
     private String userName;
-   // private String mail;
+    private String mail;
     private String password;
-@Builder
-    public User(String password, String userName, UUID id, String email) {
-        this.id = UUID.randomUUID();
-        this.password = password;
-       // this.mail=mail;
-        this.userName = userName;
-    }
+
+
 
 }

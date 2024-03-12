@@ -15,16 +15,11 @@ public class TodoRepository   {
     public static List<Todo> getTodoList() {
         return todoList;
     }
-//    private final List<Todo> subTodoList = new ArrayList<>();
-//
-//    public List<Todo> getSubTodoLis() {
-//        return subTodoList;
-//    }
+
 
 
     public void addTodo(Todo todo) {
         getTodoList().add(todo);
-//        getSubTodoLis().add(todo);
     }
     public void deleteTodo(UUID id) {
         getTodoList().removeIf(todo -> todo.getId().equals(id));
