@@ -14,11 +14,10 @@ import java.util.stream.Collectors;
 
 public class TodoService {
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     private final TodoRepository todoRepository;
     private final Scanner scanner = new Scanner(System.in);
     private final UserService userService;
-    @Builder
+
     public TodoService(TodoRepository todoRepository, UserService userService) {
         this.todoRepository = todoRepository;
         this.userService = userService;
@@ -68,7 +67,6 @@ public class TodoService {
                         .title(title)
                         .description(description)
                         .createdBy(username)
-                        // .status("Active")
                         .build();
 
                 todoRepository.addTodo(newTodo);
