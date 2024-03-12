@@ -12,7 +12,6 @@ public class TodoController {
     }
         public void run() {
         String choice;
-
             do {
                 System.out.println("1. Add Task");
                 System.out.println("2. Delete Task");
@@ -45,10 +44,7 @@ public class TodoController {
                         todoService.askUserForDateRangeAndPrintTodos();
                         break;
                     case "0":
-
-
                         System.out.println("Exiting program. Goodbye!h");
-
                         break;
                     default:
                         System.out.println("Invalid choice. Please try again.");
