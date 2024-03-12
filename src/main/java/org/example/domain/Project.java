@@ -8,17 +8,12 @@ import java.util.UUID;
 @SuppressWarnings("ALL")
 @Getter
 @Setter
+@Builder
 public class Project {
     private UUID id;
     private String description;
     private String title;
    private String createdAt;
-@Builder
-    public Project( UUID id,  String title,String description,String createdAt) {
-        this.id = UUID.randomUUID();
-        this.title = title;
-        this.createdAt=createdAt;
-        this.description=description;
-    }
+
 
 }
