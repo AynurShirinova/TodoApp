@@ -29,10 +29,10 @@ public class TodoController {
                         todoService.addTask();
                         break;
                     case "2":
-                        todoService.deleteTask(scanner);
+                        todoService.deleteTask();
                         break;
                     case "3":
-                        todoService.updateTask(scanner);
+                        todoService.updateTask();
                         break;
                     case "4":
                         todoService.readTasks();
