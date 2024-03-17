@@ -19,10 +19,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Data
-@Table
+@Table(name = "projects")
 public class Project {
     @Id
-    private UUID id;
+    UUID id;
     private String description;
     private String title;
     private String createdAt;

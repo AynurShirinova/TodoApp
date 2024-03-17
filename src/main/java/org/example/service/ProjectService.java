@@ -23,8 +23,12 @@ public class ProjectService {
     public void createNewProject() {
         System.out.println("Proje başlığını girin:");
         String title = scanner.nextLine();
+        System.out.println("description:");
+        String description = scanner.nextLine();
+
         Project newProject = Project.builder()
                 .title(title)
+                .description(description)
                 .build();;
         projectRepository.addProject(newProject);
         System.out.println("Yeni proje oluşturuldu: " + title);

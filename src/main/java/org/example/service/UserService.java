@@ -12,7 +12,7 @@ import java.util.*;
 public class UserService {
     private final Scanner scanner = new Scanner(System.in);
     private static final Map<String, User> userCredentials = new HashMap<>();
-    private static final String SELECT_USERNAME_BY_ID = "SELECT username FROM users WHERE id = ?";
+    private static final String SELECT_USERNAME_BY_ID = "SELECT user_name FROM users WHERE id = ?";
     private static final String SELECT_STATUS_BY_ID = "SELECT status FROM users WHERE id = ?";
     private static final String SELECT_ALL_USER_IDS = "SELECT id FROM users";
     private static final String SELECT_QUERY_BY_USER_ID = "SELECT email FROM users WHERE id = ?\n";
@@ -29,9 +29,9 @@ public class UserService {
             UUID id = UUID.randomUUID();
 
             // SQL əmrini hazırlamaq
-            String sql = "INSERT INTO users (id, username, email, password) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO users (id, user_name, mail, password) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, id.toString());
+            statement.setObject(1, id);
             statement.setString(2, userName);
             statement.setString(3, email);
             statement.setString(4, password);
@@ -51,14 +51,14 @@ public class UserService {
     public void logIn() {
         try (Connection connection = DatabaseManager.connect()) {
             System.out.print("E-poçt daxil edin: ");
-            String email = scanner.nextLine();
+            String mail = scanner.nextLine();
             System.out.print("Şifrə daxil edin: ");
             String password = scanner.nextLine();
 
             // SQL əmrini hazırlamaq
-            String sql = "SELECT id FROM users WHERE email = ? AND password = ?";
+            String sql = "SELECT id FROM users WHERE mail = ? AND password = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, email);
+            statement.setString(1, mail);
             statement.setString(2, password);
 
             // SQL əmri icra etmək və nəticəni əldə etmək
@@ -84,7 +84,7 @@ public class UserService {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                return resultSet.getString("email");
+                return resultSet.getString("mail");
             }
         } catch (SQLException e) {
             e.printStackTrace();
