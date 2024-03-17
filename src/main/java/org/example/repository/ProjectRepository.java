@@ -8,12 +8,12 @@ import java.util.UUID;
 
 public class ProjectRepository {
     private final String url = "jdbc:postgresql://localhost:5432/postgres";
-    private final String username = "sa";
-    private final String password = "sa";
+    private final String username = "postgres";
+    private final String password = "aynur123";
 
     public List<Project> getProjectList() {
         List<Project> projects = new ArrayList<>();
-        String sql = "SELECT * FROM Project";
+        String sql = "SELECT * FROM projects";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              Statement statement = connection.createStatement();
@@ -36,12 +36,13 @@ public class ProjectRepository {
     }
 
     public void addProject(Project project) {
-        String sql = "INSERT INTO Project (id, title, description, createdAt) VALUES (?, ?, ?, ?)";
+       UUID id= UUID.randomUUID();
+        String sql = "INSERT INTO projects (id, title, description, createdAt) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, project.getId().toString());
+            statement.setObject(1, id);
             statement.setString(2, project.getTitle());
             statement.setString(3, project.getDescription());
             statement.setString(4, project.getCreatedAt());
@@ -54,7 +55,7 @@ public class ProjectRepository {
     }
 
     public void updateProject(UUID id, Project updatedProject) {
-        String sql = "UPDATE Project SET title = ?, description = ?, createdAt = ? WHERE id = ?";
+        String sql = "UPDATE projects SET title = ?, description = ?, createdAt = ? WHERE id = ?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -76,7 +77,7 @@ public class ProjectRepository {
     }
 
     public void deleteProject(UUID id) {
-        String sql = "DELETE FROM Project WHERE id = ?";
+        String sql = "DELETE FROM projects WHERE id = ?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -94,12 +95,12 @@ public class ProjectRepository {
         }
     }
     public Project getProjectById(UUID id) {
-        String sql = "SELECT * FROM Project WHERE id = ?";
+        String sql = "SELECT * FROM projects WHERE id = ?";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, id.toString());
+            statement.setObject(1, id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
