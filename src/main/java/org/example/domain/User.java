@@ -1,6 +1,7 @@
 package org.example.domain;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -17,10 +18,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Data
-@Table
+@Table(name = "users")
 public class User {
     @Id
     UUID id;
+    @Column(name = "user_name")
     private String userName;
     private String mail;
     private String password;

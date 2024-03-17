@@ -26,10 +26,10 @@ public class UserController {
             choice = scanner.nextLine().trim();
             switch (choice) {
                 case "1":
-                    this.userService.logIn(id);
+                    this.userService.logIn();
                     break;
                 case "2":
-                    this.userService.logUp(id);
+                    this.userService.logUp();
                     break;
                 case "0":
                     System.out.println("Exiting program. Goodbye!");
