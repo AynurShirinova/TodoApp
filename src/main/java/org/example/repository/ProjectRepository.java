@@ -42,12 +42,10 @@ public class ProjectRepository {
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setObject(1, CoreUtils.getRandomId());
             statement.setString(2, project.getTitle());
             statement.setString(3, project.getDescription());
             statement.setString(4, project.getCreatedAt());
-
             statement.executeUpdate();
             System.out.println("Proje başarıyla eklendi.");
         } catch (SQLException e) {
