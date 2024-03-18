@@ -45,7 +45,6 @@ public class ProjectController {
     }
 
     private void listAllProjects() {
-
         System.out.println("Mevcut projeler:");
         List<Project> projects= projectService.getAllProjects();
         projects.forEach(project -> System.out.println("ID: " + project.getId() + ", Başlık: " + project.getTitle()));
