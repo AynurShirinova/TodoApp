@@ -3,19 +3,23 @@ package org.example.controller;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.Main;
+import org.example.domain.Project;
 import org.example.repository.ProjectRepository;
 import org.example.service.ProjectService;
+
+import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
+
 @Builder
 @Getter
 @Setter
 public class ProjectController {
     private final Scanner scanner = new Scanner(System.in);
     private final ProjectService projectService;
-    private final ProjectRepository projectRepository;
-    public ProjectController(ProjectService projectService,ProjectRepository projectRepository) {
+    public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
-        this.projectRepository = projectRepository;
     }
 
     public void manageProjects() {
@@ -23,12 +27,12 @@ public class ProjectController {
             System.out.println("Yeni bir proje yaratmak istiyor musunuz? (Evet/Hayır)");
             String cevap = scanner.nextLine();
             if ("Evet".equalsIgnoreCase(cevap)) {
-                projectService.createNewProject();
+                createNewProject();
             } else if ("Hayır".equalsIgnoreCase(cevap)) {
-                if (projectRepository.getProjectList().isEmpty()) {
+                if (projectService.getAllProjects().isEmpty()) {
                     System.out.println("Mevcut proje yok.");
                 } else {
-                    projectService.accessExistingProject();
+                    listAllProjects();
                 }
             } else {
                 System.out.println("Geçersiz seçim. Lütfen 'Evet' veya 'Hayır' yazın.");
@@ -39,4 +43,35 @@ public class ProjectController {
             }
         }
     }
+
+    private void listAllProjects() {
+
+        System.out.println("Mevcut projeler:");
+        List<Project> projects= projectService.getAllProjects();
+        projects.forEach(project -> System.out.println("ID: " + project.getId() + ", Başlık: " + project.getTitle()));
+        System.out.println("Daxil olmaq istediğiniz proje ID'sini girin:");
+        UUID projectId = UUID.fromString(scanner.nextLine());
+         Project selectedProject=projectService.getProjectById(projectId);
+
+        if (selectedProject != null) {
+            System.out.println("Şu anki proje: " + selectedProject.getTitle());
+            new Main().todoController.run();
+        } else {
+            System.out.println("Proje bulunamadı.");
+        }
+    }
+
+    private void createNewProject() {
+        System.out.println("Proje başlığını girin:");
+        String title = scanner.nextLine();
+        System.out.println("description:");
+        String description = scanner.nextLine();
+
+        Project newProject = Project.builder()
+                .title(title)
+                .description(description)
+                .build();
+        projectService.createNewProject(newProject);
+    }
+
 }
