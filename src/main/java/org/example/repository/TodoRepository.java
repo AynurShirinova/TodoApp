@@ -14,46 +14,38 @@ import java.util.UUID;
 public class TodoRepository   {
         public void addTodo(Todo todo) {
             String sql = "INSERT INTO todos (id, title, description, status, assigned_to) VALUES (?, ?, ?, ?, ?)";
-
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
-
                 statement.setString(1, todo.getId().toString());
                 statement.setString(2, todo.getTitle());
                 statement.setString(3, todo.getDescription());
                 statement.setString(4, todo.getStatus().toString());
                 statement.setString(5, todo.getAssignedTo().toString());
-
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
-        public void deleteTodo(UUID id) {
+        public void deleteTodo(Todo todo) {
             String sql = "DELETE FROM todos WHERE id = ?";
-
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
-
-                statement.setString(1, id.toString());
+                statement.setString(1, todo.getId().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
-        public void updateTodo(UUID id, Todo updatedTodo) {
+        public void updateTodo(Todo todo) {
             String sql = "UPDATE todos SET title = ?, description = ?, status = ? WHERE id = ?";
-
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
-
-                statement.setString(1, updatedTodo.getTitle());
-                statement.setString(2, updatedTodo.getDescription());
-                statement.setString(3, updatedTodo.getStatus().toString());
-                statement.setString(4, id.toString());
-
+                statement.setString(1, todo.getTitle());
+                statement.setString(2, todo.getDescription());
+                statement.setString(3, todo.getStatus().toString());
+                statement.setString(4, todo.getId().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -63,11 +55,9 @@ public class TodoRepository   {
         public List<Todo> readTasks() {
             List<Todo> todos = new ArrayList<>();
             String sql = "SELECT * FROM todos";
-
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql);
                  ResultSet resultSet = statement.executeQuery()) {
-
                 while (resultSet.next()) {
                     Todo todo = Todo.builder()
                             .id(UUID.fromString(resultSet.getString("id")))
@@ -88,9 +78,7 @@ public class TodoRepository   {
             String sql = "SELECT * FROM todos WHERE id = ?";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
-
                 statement.setString(1, id.toString());
-
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         return Optional.of(Todo.builder()
@@ -108,18 +96,15 @@ public class TodoRepository   {
             return Optional.empty();
         }
 
-        public List<Todo> findByAssignedTo(UUID assignedToId) {
+        public List<Todo> findByAssignedTo(Todo todo) {
             List<Todo> todos = new ArrayList<>();
             String sql = "SELECT * FROM todos WHERE assigned_to = ?";
-
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
-
-                statement.setString(1, assignedToId.toString());
-
+                statement.setString(1, todo.toString());
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        Todo todo = Todo.builder()
+                        Todo todoss = Todo.builder()
                                 .id(UUID.fromString(resultSet.getString("id")))
                                 .title(resultSet.getString("title"))
                                 .description(resultSet.getString("description"))
@@ -137,13 +122,10 @@ public class TodoRepository   {
     public List<Todo> getTodosBetweenDates(LocalDate start, LocalDate end) {
         List<Todo> todos = new ArrayList<>();
         String sql = "SELECT * FROM todos WHERE created BETWEEN ? AND ?";
-
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setDate(1, Date.valueOf(start));
             statement.setDate(2, Date.valueOf(end));
-
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     UUID id = UUID.fromString(resultSet.getString("id"));
