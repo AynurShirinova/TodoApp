@@ -19,12 +19,10 @@ public class TodoService {
             this.userService = userService;
         }
 
-    // TodoService.java
     public void addTask() {
         try {
             List<UUID> userIds = new ArrayList<>();
             Map<UUID, String> userIdsByEmail = new HashMap<>();
-
             // Bütün istifadəçi id-lərini və email-ləri yığılacaq list və map yaradırıq
             for (UUID userId : userService.getAllUserIds()) {
                 String email = userService.getEmailByUserId(userId);
@@ -34,7 +32,6 @@ public class TodoService {
 
             System.out.println("task or subtask?");
             String taskType = scanner.nextLine();
-
             UUID assignedTo = null;
             if (taskType.equals("task")) {
                 // Task yaratmaq üçün lazımi məlumatları əldə edirik
@@ -42,7 +39,6 @@ public class TodoService {
                     String email = userIdsByEmail.get(userId);
                     System.out.printf("User ID: %s, Email: %s\n", userId, email);
                 }
-
                 System.out.println("Enter the ID of the user to assign the task:");
                 String userIdString = scanner.nextLine();
                 assignedTo = UUID.fromString(userIdString);
@@ -84,19 +80,16 @@ public class TodoService {
     }
 
 
-    public void deleteTask() {
-            System.out.println("Enter the ID of the task you want to delete:");
-            String idString = scanner.nextLine();
-            UUID id = UUID.fromString(idString);
-            todoRepository.deleteTodo(id);
+    public void deleteTask(Todo todo) {
+//            System.out.println("Enter the ID of the task you want to delete:");
+//            String idString = scanner.nextLine();
+//            UUID id = UUID.fromString(idString);
+            todoRepository.deleteTodo(todo);
             System.out.println("Task deleted successfully.");
         }
 
-        public void updateTask() {
-            System.out.println("Enter the ID of the task you want to update:");
-            String idString = scanner.nextLine();
-            UUID id = UUID.fromString(idString);
-            // Add update task logic
+        public void updateTask(Todo todo) {
+            todoRepository.updateTodo(todo);
         }
 
         public void readTasks() {
@@ -104,32 +97,34 @@ public class TodoService {
             tasks.forEach(task -> System.out.println(task));
         }
 
-        public void listTasksByAssignedTo() {
-            System.out.println("Enter the ID of the user to list tasks for:");
-            String userIdString = scanner.nextLine();
-            UUID userId = UUID.fromString(userIdString);
-            List<Todo> assignedTasks = todoRepository.findByAssignedTo(userId);
-            if (assignedTasks.isEmpty()) {
-                System.out.println("No tasks assigned to user with ID " + userId);
-            } else {
-                System.out.println("Tasks assigned to user with ID " + userId + ":");
-                assignedTasks.forEach(task -> System.out.println(task));
-            }
+        public void listTasksByAssignedTo(Todo todo) {
+//            System.out.println("Enter the ID of the user to list tasks for:");
+//            String userIdString = scanner.nextLine();
+//            UUID userId = UUID.fromString(userIdString);
+//            List<Todo> assignedTasks = todoRepository.findByAssignedTo(userId);
+//            if (assignedTasks.isEmpty()) {
+//                System.out.println("No tasks assigned to user with ID " + userId);
+//            } else {
+//                System.out.println("Tasks assigned to user with ID " + userId + ":");
+//                assignedTasks.forEach(task -> System.out.println(task));
+//            }
+            todoRepository.findByAssignedTo(todo);
         }
 
-        public void askUserForDateRangeAndPrintTodos() {
-            System.out.println("Enter start date (dd/MM/yyyy):");
-            String startDateInput = scanner.nextLine();
-            LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
+        public void askUserForDateRangeAndPrintTodos(Todo todo) {
+//            System.out.println("Enter start date (dd/MM/yyyy):");
+//            String startDateInput = scanner.nextLine();
+//            LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
+//
+//            System.out.println("Enter end date (dd/MM/yyyy):");
+//            String endDateInput = scanner.nextLine();
+//            LocalDate endDate = LocalDate.parse(endDateInput, dateFormatter);
 
-            System.out.println("Enter end date (dd/MM/yyyy):");
-            String endDateInput = scanner.nextLine();
-            LocalDate endDate = LocalDate.parse(endDateInput, dateFormatter);
+//            List<Todo> filteredTodos = todoRepository.getTodosBetweenDates(todo.startDate, endDate);
+//            filteredTodos.forEach(task -> System.out.println(task));
 
-            List<Todo> filteredTodos = todoRepository.getTodosBetweenDates(startDate, endDate);
-            filteredTodos.forEach(task -> System.out.println(task));
         }
-    private void printTodos(List<Todo> todos) {
+    public void printTodos(List<Todo> todos) {
         if (todos.isEmpty()) {
             System.out.println("Belirtilmiş tarix aralığında todo tapılmadı.");
         } else {

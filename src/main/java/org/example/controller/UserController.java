@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import lombok.Builder;
+import org.example.domain.User;
 import org.example.service.UserService;
 
 import java.util.Scanner;
@@ -26,10 +27,10 @@ public class UserController {
             choice = scanner.nextLine().trim();
             switch (choice) {
                 case "1":
-                    this.userService.logIn();
+                    logIn();
                     break;
                 case "2":
-                    this.userService.logUp();
+                    logUp();
                     break;
                 case "0":
                     System.out.println("Exiting program. Goodbye!");
@@ -40,5 +41,32 @@ public class UserController {
             System.out.println("-----------------------");
         } while (!choice.equals("0"));
 
+    }
+
+    private void logUp() {
+        System.out.print("E-poçt daxil edin: ");
+        String mail = scanner.nextLine();
+        System.out.print("İstifadəçi adı daxil edin: ");
+        String userName = scanner.nextLine();
+        System.out.print("Şifrə daxil edin: ");
+        String password = scanner.nextLine();
+        User user = User.builder()
+                .mail(mail)
+                .userName(userName)
+                .password(password)
+                .build();
+        userService.logUp(user);
+    }
+
+    private void logIn() {
+        System.out.print("E-poçt daxil edin: ");
+        String mail = scanner.nextLine();
+        System.out.print("Şifrə daxil edin: ");
+        String password = scanner.nextLine();
+         User user = User.builder()
+                 .mail(mail)
+                 .password(password)
+                 .build();
+         userService.logIn(user);
     }
 }
