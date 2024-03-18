@@ -20,33 +20,18 @@ public class ProjectService {
     }
 
 
-    public void createNewProject() {
-        System.out.println("Proje başlığını girin:");
-        String title = scanner.nextLine();
-        System.out.println("description:");
-        String description = scanner.nextLine();
+    public void createNewProject(Project newProject) {
 
-        Project newProject = Project.builder()
-                .title(title)
-                .description(description)
-                .build();;
         projectRepository.addProject(newProject);
-        System.out.println("Yeni proje oluşturuldu: " + title);
+        System.out.println("Yeni proje oluşturuldu: " + newProject.getTitle());
     }
 
-    public void accessExistingProject() {
-        System.out.println("Mevcut projeler:");
-        List<Project> projects = projectRepository.getProjectList();
-        projects.forEach(project -> System.out.println("ID: " + project.getId() + ", Başlık: " + project.getTitle()));
-        System.out.println("Daxil olmaq istediğiniz proje ID'sini girin:");
-        UUID projectId = UUID.fromString(scanner.nextLine());
-        Project selectedProject = projectRepository.getProjectById(projectId);
+    public List<Project> getAllProjects() {
 
-        if (selectedProject != null) {
-            System.out.println("Şu anki proje: " + selectedProject.getTitle());
-            new Main().todoController.run();
-        } else {
-            System.out.println("Proje bulunamadı.");
-        }
+        return projectRepository.getProjectList();
+    }
+    public Project getProjectById(UUID projectId){
+        return projectRepository.getProjectById(projectId);
+
     }
 }
