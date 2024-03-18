@@ -3,6 +3,8 @@ package org.example.service;
 import org.example.Main;
 import org.example.database.DatabaseManager;
 import org.example.domain.User;
+import org.example.utils.CoreUtils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,12 +28,12 @@ public class UserService {
             String password = scanner.nextLine();
 
             // UUID yaratmaq
-            UUID id = UUID.randomUUID();
+//            UUID id = UUID.randomUUID();
 
             // SQL əmrini hazırlamaq
             String sql = "INSERT INTO users (id, user_name, mail, password) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setObject(1, id);
+            statement.setObject(1, CoreUtils.getRandomId());
             statement.setString(2, userName);
             statement.setString(3, email);
             statement.setString(4, password);

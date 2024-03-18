@@ -1,6 +1,8 @@
 package org.example.repository;
 
 import org.example.domain.Project;
+import org.example.utils.CoreUtils;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +38,12 @@ public class ProjectRepository {
     }
 
     public void addProject(Project project) {
-       UUID id= UUID.randomUUID();
         String sql = "INSERT INTO projects (id, title, description, createdAt) VALUES (?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setObject(1, id);
+            statement.setObject(1, CoreUtils.getRandomId());
             statement.setString(2, project.getTitle());
             statement.setString(3, project.getDescription());
             statement.setString(4, project.getCreatedAt());
