@@ -31,5 +31,7 @@ public class Todo {
     private Status status;
     private String priority;
     private LocalDate created;
+    private String endDateInput;
+    private String startDateInput;
 
 }
