@@ -1,5 +1,6 @@
 package org.example.repository;
 
+import org.example.database.DatabaseManager;
 import org.example.domain.Project;
 import org.example.utils.CoreUtils;
 
@@ -40,8 +41,8 @@ public class ProjectRepository {
     public void addProject(Project project) {
         String sql = "INSERT INTO projects (id, title, description, createdAt) VALUES (?, ?, ?, ?)";
 
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = DatabaseManager.connect();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setObject(1, CoreUtils.getRandomId());
             statement.setString(2, project.getTitle());
             statement.setString(3, project.getDescription());
