@@ -4,10 +4,13 @@ import lombok.Builder;
 import org.example.Main;
 import org.example.domain.Project;
 import org.example.repository.ProjectRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.List;
 @SuppressWarnings("ALL")
+@Service
 public class ProjectService {
     private ProjectRepository projectRepository;
     private TodoService todoService;
