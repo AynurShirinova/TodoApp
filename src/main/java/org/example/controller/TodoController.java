@@ -106,9 +106,6 @@ public class TodoController {
             System.out.println("Enter description:");
             String description = scanner.nextLine();
 
-            System.out.println("Enter status:");
-            String status = scanner.nextLine();
-
             System.out.println("Enter start date (dd/MM/yyyy):");
             String startDateInput = scanner.nextLine();
             LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
@@ -117,12 +114,13 @@ public class TodoController {
                     .assignedTo(assignedTo)
                     .title(title)
                     .description(description)
-                    .status(Status.valueOf(status))
+                    .status(Status.PROGRESS)
                     .created(startDate)
                     .build();
 
             todoService.addTask(newTodo);
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("Invalid date format. Please enter date in dd/MM/yyyy format.");
         }
     }
@@ -209,4 +207,4 @@ public class TodoController {
 
 
     }
-}
+
