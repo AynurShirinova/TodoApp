@@ -15,7 +15,7 @@ import java.util.UUID;
 @SuppressWarnings("ALL")
 public class TodoRepository   {
         public void addTodo(Todo todo) {
-            String sql = "INSERT INTO todos (id, title, description, status, assigned_to) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO todo (id, title, description, status, assigned_to) VALUES (?, ?, ?, ?, ?)";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setObject(1, CoreUtils.getRandomId());
@@ -154,29 +154,5 @@ public class TodoRepository   {
         }
         return todos;
     }
-    public List<Todo> findByAssignedTo(UUID userId) {
-        List<Todo> todos = new ArrayList<>();
-        String sql = "SELECT * FROM todos WHERE assigned_to = ?";
-        try (Connection connection = DatabaseManager.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, userId.toString());
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    Todo todo = Todo.builder()
-                            .id(UUID.fromString(resultSet.getString("id")))
-                            .title(resultSet.getString("title"))
-                            .description(resultSet.getString("description"))
-                            .status(Status.valueOf(resultSet.getString("status")))
-                            .assignedTo(UUID.fromString(resultSet.getString("assigned_to")))
-                            .build();
-                    todos.add(todo);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return todos;
-    }
-
 }
 
