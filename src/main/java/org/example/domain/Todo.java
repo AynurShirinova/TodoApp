@@ -4,10 +4,8 @@ package org.example.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -18,20 +16,21 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Data
-@Table
+@Table(name = "todo")
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class Todo {
     @Id
-    UUID id;
-    UUID fkUserId;
-    private String projectId;
-    private String title;
-    private String description;
-    private String createdBy;
-    private UUID assignedTo;
-    private Status status;
-    private String priority;
-    private LocalDate created;
-    private String endDateInput;
-    private String startDateInput;
+     UUID id;
+     UUID fkUserId;
+     String projectId;
+     String title;
+     String description;
+     String createdBy;
+     UUID assignedTo;
+     Status status;
+     String priority;
+     LocalDate created;
+     String endDateInput;
+     String startDateInput;
 
 }
