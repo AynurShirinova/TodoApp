@@ -3,6 +3,8 @@ package org.example.message;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.example.domain.Project;
+import org.example.repository.ProjectRepository;
 
 @Data
 @Builder
@@ -30,4 +32,9 @@ public class GenericResponse <T>{
                 .success(false)
                 .build();
     }
-}
+
+
+     //   public static final String PROJECT_CREATED_MESSAGE = "Yeni proje oluşturuldu: ";
+
+    }
+

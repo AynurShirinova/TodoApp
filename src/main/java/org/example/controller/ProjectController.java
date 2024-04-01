@@ -3,8 +3,10 @@ package org.example.controller;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.var;
 import org.example.Main;
 import org.example.domain.Project;
+import org.example.message.GenericResponse;
 import org.example.repository.ProjectRepository;
 import org.example.service.ProjectService;
 
@@ -70,7 +72,16 @@ public class ProjectController {
                 .title(title)
                 .description(description)
                 .build();
-        projectService.createNewProject(newProject);
+        var response = projectService.createNewProject(newProject);
+        if(response.isSuccess()){
+            System.out.println("Yeni proje oluşturuldu: " + response.getData().getTitle() );
+
+        }
+        else{
+            System.out.println(response.getMessage());
+        }
+//         System.out.println("Yeni proje oluşturuldu: " + response.getData().getTitle() + response.getMessage());
+
     }
 
 }
