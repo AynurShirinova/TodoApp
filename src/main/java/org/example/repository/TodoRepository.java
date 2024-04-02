@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.database.DatabaseManager;
 import org.example.domain.Status;
 import org.example.domain.Todo;
+import org.example.dto.TodoDTO;
 import org.example.utils.CoreUtils;
 
 import java.sql.*;
@@ -15,14 +16,14 @@ import java.util.UUID;
 @SuppressWarnings("ALL")
 public class TodoRepository   {
         public void addTodo(Todo todo) {
-            String sql = "INSERT INTO todo (id, title, description, status, assigned_to) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO todos (id, title, description, status, assigned_to) VALUES (?, ?, ?, ?, ?)";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setObject(1, CoreUtils.getRandomId());
                 statement.setString(2, todo.getTitle());
                 statement.setString(3, todo.getDescription());
                 statement.setString(4, todo.getStatus().toString());
-                statement.setString(5, todo.getAssignedTo().toString());
+                statement.setObject(5, todo.getAssignedTo().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -33,7 +34,7 @@ public class TodoRepository   {
             String sql = "DELETE FROM todos WHERE id = ?";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
-                statement.setString(1, todo.getId().toString());
+                statement.setObject(1, todo.getId());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -54,15 +55,17 @@ public class TodoRepository   {
             }
         }
 
-        public List<Todo> readTasks() {
-            List<Todo> todos = new ArrayList<>();
+        public List<TodoDTO> readTasks() {
+            List<TodoDTO> todos = new ArrayList<>();
             String sql = "SELECT * FROM todos";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql);
                  ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Todo todo = Todo.builder()
+                    TodoDTO todo = TodoDTO.builder()
                             .id(UUID.fromString(resultSet.getString("id")))
+                            .projectId(resultSet.getString("project_id"))
+                            .createdBy(resultSet.getString("created_by"))
                             .title(resultSet.getString("title"))
                             .description(resultSet.getString("description"))
                             .status(Status.valueOf(resultSet.getString("status")))
