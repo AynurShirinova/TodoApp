@@ -1,6 +1,7 @@
 package org.example.service;
 
 import org.example.domain.Todo;
+import org.example.dto.TodoDTO;
 import org.example.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class TodoService {
     }
 
 
-    public List<Todo> readTasks() {
+    public List<TodoDTO> readTasks() {
         return todoRepository.readTasks();
     }
 
