@@ -1,6 +1,7 @@
 package org.example.controller;
 import org.example.domain.Status;
 import org.example.domain.Todo;
+import org.example.dto.TodoDTO;
 import org.example.service.TodoService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -81,12 +82,12 @@ public class TodoController {
 
 
     private void readTasks() {
-            List<Todo> tasks = todoService.readTasks();
+            List<TodoDTO> tasks = todoService.readTasks();
             if (tasks.isEmpty()) {
                 System.out.println("No tasks found.");
             } else {
                 System.out.println("Tasks:");
-                for (Todo task : tasks) {
+                for (TodoDTO task : tasks) {
                     System.out.println(task);
                 }
             }
