@@ -16,12 +16,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Data
-@Table(name = "todo")
+@Table(name = "todos")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Todo {
     @Id
      UUID id;
-     UUID fkUserId;
+ //  UUID fkUserId;
      String projectId;
      String title;
      String description;
