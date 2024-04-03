@@ -26,21 +26,21 @@ public class ProjectController {
 
     public void manageProjects() {
         while (true) {
-            System.out.println("Yeni bir proje yaratmak istiyor musunuz? (Evet/Hayır)");
+            System.out.println("Yeni bir proje yaratmak istiyor musunuz? (yes/no)");
             String cevap = scanner.nextLine();
-            if ("Evet".equalsIgnoreCase(cevap)) {
+            if ("yes".equalsIgnoreCase(cevap)) {
                 createNewProject();
-            } else if ("Hayır".equalsIgnoreCase(cevap)) {
+            } else if ("no".equalsIgnoreCase(cevap)) {
                 if (projectService.getAllProjects().isEmpty()) {
                     System.out.println("Mevcut proje yok.");
                 } else {
                     listAllProjects();
                 }
             } else {
-                System.out.println("Geçersiz seçim. Lütfen 'Evet' veya 'Hayır' yazın.");
+                System.out.println("Geçersiz seçim. Lütfen 'yes' veya 'no' yazın.");
             }
-            System.out.println("Devam etmek istiyor musunuz? (Evet/Hayır)");
-            if ("Hayır".equalsIgnoreCase(scanner.nextLine())) {
+            System.out.println("Devam etmek istiyor musunuz? (yes/no)");
+            if ("no".equalsIgnoreCase(scanner.nextLine())) {
                 break;
             }
         }
