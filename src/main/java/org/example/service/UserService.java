@@ -89,7 +89,6 @@ import org.springframework.stereotype.Service;
 import org.example.repository.UserRepository;
 import org.example.domain.User;
 
-import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -121,8 +120,8 @@ public class UserService {
         return userRepository.getStatusById(uuid);
     }
 
-    public List<UUID> getAllUserIds() {
-        return userRepository.getAllUserIds();
+    public Map<UUID, String> getAllUserIds() {
+        return userRepository.getAllUserNamesById();
     }
 }
 
