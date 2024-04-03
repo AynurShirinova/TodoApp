@@ -8,9 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class UserRepository {
 
@@ -98,19 +96,24 @@ public class UserRepository {
         return "Input boş və ya id yanlışdır";
     }
 
-    public List<UUID> getAllUserIds() {
-        List<UUID> userIds = new ArrayList<>();
+
+public Map<UUID, String> getAllUserNamesById() {
+    Map<UUID, String> userNamesById = new HashMap<>();
         try (Connection connection = DatabaseManager.connect()) {
-            String SELECT_ALL_USER_IDS = "SELECT id FROM users";
+            String SELECT_ALL_USER_IDS = "SELECT id, user_name FROM users";
             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_USER_IDS);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                userIds.add(UUID.fromString(resultSet.getString("id")));
+                UUID userId = UUID.fromString(resultSet.getString("id"));
+                String userName = resultSet.getString("user_name");
+                userNamesById.put(userId, userName);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return userIds;
+        return userNamesById;
     }
+
 }
 
