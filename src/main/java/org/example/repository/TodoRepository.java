@@ -1,22 +1,21 @@
 package org.example.repository;
 
 import org.example.database.DatabaseManager;
+import org.example.domain.Priority;
 import org.example.domain.Status;
 import org.example.domain.Todo;
 import org.example.dto.TodoDTO;
 import org.example.utils.CoreUtils;
 
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public class TodoRepository   {
         public void addTodo(Todo todo) {
-            String sql = "INSERT INTO todos (id, title, description, status, assigned_to) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO todos (id, title, description, status, assigned_to,created, created_by, priority) VALUES (?, ?, ?, ?, ?,?, ?,?)";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setObject(1, CoreUtils.getRandomId());
@@ -24,6 +23,11 @@ public class TodoRepository   {
                 statement.setString(3, todo.getDescription());
                 statement.setString(4, todo.getStatus().toString());
                 statement.setObject(5, todo.getAssignedTo().toString());
+                statement.setObject(6, todo.getCreated());
+                statement.setString(7, todo.getCreatedBy());
+                statement.setString(8, todo.getPriority().toString());
+
+
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -42,12 +46,13 @@ public class TodoRepository   {
         }
 
         public void updateTask(Todo todo) {
-            String sql = "UPDATE todos SET title = ?, description = ?, status = ? WHERE id = ?";
+            String sql = "UPDATE todos SET title = ?, description = ?, status = ?, priority = ? WHERE id = ?";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, todo.getTitle());
                 statement.setString(2, todo.getDescription());
                 statement.setString(3, todo.getStatus().toString());
+                statement.setString(3, todo.getPriority().toString());
                 statement.setString(4, todo.getId().toString());
                 statement.executeUpdate();
             } catch (SQLException e) {
@@ -64,11 +69,11 @@ public class TodoRepository   {
                 while (resultSet.next()) {
                     TodoDTO todo = TodoDTO.builder()
                             .id(UUID.fromString(resultSet.getString("id")))
-                            .projectId(resultSet.getString("project_id"))
                             .createdBy(resultSet.getString("created_by"))
                             .title(resultSet.getString("title"))
                             .description(resultSet.getString("description"))
                             .status(Status.valueOf(resultSet.getString("status")))
+                            .priority(Priority.valueOf(resultSet.getString("priority")))
                             .assignedTo(UUID.fromString(resultSet.getString("assigned_to")))
                             .build();
                     todos.add(todo);
@@ -156,6 +161,24 @@ public class TodoRepository   {
             e.printStackTrace();
         }
         return todos;
+    }
+
+public Map<UUID, String> getAllTaskIds() {
+    Map<UUID, String> taskNamesById = new HashMap<>();
+        try (Connection connection = DatabaseManager.connect()) {
+            String SELECT_ALL_TASK_IDS = "SELECT id, title FROM todos";
+            PreparedStatement statement = connection.prepareStatement(SELECT_ALL_TASK_IDS);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                UUID taskId=UUID.fromString(resultSet.getString("id"));
+                String title = resultSet.getString("title");
+                taskNamesById.put(taskId, title);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return taskNamesById;
     }
 }
 
