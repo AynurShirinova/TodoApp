@@ -52,8 +52,8 @@ public class TodoRepository   {
                 statement.setString(1, todo.getTitle());
                 statement.setString(2, todo.getDescription());
                 statement.setString(3, todo.getStatus().toString());
-                statement.setString(3, todo.getPriority().toString());
-                statement.setString(4, todo.getId().toString());
+                statement.setString(4, todo.getPriority().toString());
+                statement.setObject(5, todo.getId());
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -73,16 +73,31 @@ public class TodoRepository   {
                             .title(resultSet.getString("title"))
                             .description(resultSet.getString("description"))
                             .status(Status.valueOf(resultSet.getString("status")))
-                            .priority(Priority.valueOf(resultSet.getString("priority")))
+                            // .priority(Priority.valueOf(resultSet.getString("priority")))
+                            .priority(getPriority(resultSet.getString("priority")))
                             .assignedTo(UUID.fromString(resultSet.getString("assigned_to")))
                             .build();
                     todos.add(todo);
+
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             return todos;
         }
+    private Priority getPriority(String priorityString) {
+        Priority priority = null;
+        if (priorityString != null) {
+            try {
+                priority = Priority.valueOf(priorityString);
+            } catch (IllegalArgumentException e) {
+                // Enum sabiti oluşturulamazsa yapılacak işlemler
+                e.printStackTrace();
+            }
+        }
+        return priority;
+    }
+
 
         public Optional<Todo> getTodoById(UUID id) {
             String sql = "SELECT * FROM todos WHERE id = ?";
