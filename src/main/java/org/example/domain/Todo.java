@@ -1,6 +1,5 @@
 package org.example.domain;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
 //@SuppressWarnings("ALL")
 @Builder
 @NoArgsConstructor
@@ -28,7 +26,7 @@ public class Todo {
      String createdBy;
      UUID assignedTo;
      Status status;
-     String priority;
+     Priority priority;
      LocalDate created;
      String endDateInput;
      String startDateInput;

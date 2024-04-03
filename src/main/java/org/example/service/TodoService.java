@@ -6,6 +6,7 @@ import org.example.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -45,5 +46,7 @@ public class TodoService {
     public List<Todo> listTasksByAssignedTo(UUID userId) {
         return todoRepository.findByAssignedTo(userId);
     }
-
+    public Map<UUID, String> getAllTaskIds() {
+        return todoRepository.getAllTaskIds();
+    }
 }

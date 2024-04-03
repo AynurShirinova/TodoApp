@@ -1,23 +1,31 @@
 package org.example.controller;
+import org.example.domain.Priority;
 import org.example.domain.Status;
 import org.example.domain.Todo;
+import org.example.domain.User;
 import org.example.dto.TodoDTO;
 import org.example.service.TodoService;
+import org.example.service.UserService;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
+
 @SuppressWarnings("ALL")
 
 public class TodoController {
+    private final User user;
+    private final UserService userService;
     private final TodoService todoService;
     private final Scanner scanner = new Scanner(System.in);
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public TodoController(TodoService todoService) {
+    public TodoController(User user, UserService userService, TodoService todoService) {
+        this.user = user;
+        this.userService = userService;
         this.todoService = todoService;
     }
         public void run() {
@@ -97,6 +105,7 @@ public class TodoController {
 
     private void addTask() {
         try {
+            System.out.println(userService.getAllUserIds());
             System.out.println("Enter the ID of the user to assign the task:");
             String userIdString = scanner.nextLine();
             UUID assignedTo = UUID.fromString(userIdString);
@@ -116,8 +125,10 @@ public class TodoController {
                     .title(title)
                     .description(description)
                     .status(Status.PROGRESS)
+                    .priority(Priority.MEDIUM)
                     .created(startDate)
                     .build();
+            newTodo.setCreatedBy(user.getUserName());
 
             todoService.addTask(newTodo);
         } catch (IllegalArgumentException e) {
@@ -143,7 +154,6 @@ public class TodoController {
         }
 
     }
-
       private void printTodos(List<Todo> todos) {
             if (todos.isEmpty()) {
                 System.out.println("No tasks found.");
@@ -154,28 +164,53 @@ public class TodoController {
                 }
             }
       }
-
-
-
         private void updateTask() {
             try {
                 System.out.println("Enter the ID of the task you want to update:");
                 String idString = scanner.nextLine();
                 UUID id = UUID.fromString(idString);
 
-                // Gerekli bilgileri kullanıcıdan alabilirsiniz
                 System.out.println("Enter new title:");
                 String newTitle = scanner.nextLine();
                 System.out.println("Enter new description:");
                 String newDescription = scanner.nextLine();
-                System.out.println("Enter new status:");
-                String newStatus = scanner.nextLine();
+
+                System.out.println("Enter new status( PROGRESS, COMPLETED, HOLD):");
+                String newStatusString = scanner.nextLine();
+
+                Status newStatus= null;
+                try {
+                    newStatus = Status.valueOf(newStatusString);
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("Invalid priority. Please choose from LOW, MEDIUM, or HIGH.");
+                    return;
+                }
+
+                System.out.println("Enter new priority (LOW, MEDIUM, HIGH):");
+                String newPriorityString = scanner.nextLine();
+
+
+                // Kullanıcının girdisini kontrol edin
+                if (newPriorityString.isEmpty() ) {
+                    System.out.println("Priority cannot be empty. Please try again.");
+                    return;
+                }
+
+                Priority newPriority = Priority.valueOf(newPriorityString.toUpperCase());
+
+                try {
+                    newPriority = Priority.valueOf(newPriorityString);
+                } catch (IllegalArgumentException ex) {
+                    System.out.println("Invalid priority. Please choose from LOW, MEDIUM, or HIGH.");
+                    return;
+                }
 
                 Todo todo = Todo.builder()
                         .id(id)
                         .title(newTitle)
                         .description(newDescription)
-                        .status(Status.valueOf(newStatus))
+                        .status(Status.valueOf(newStatusString))
+                        .priority(Priority.valueOf(newPriorityString))
                         .build();
 
                 todoService.updateTask(todo);
@@ -184,12 +219,9 @@ public class TodoController {
                 System.out.println("Invalid input. Please try again.");
             }
         }
-
-
-
-
         private void deleteTask() {
             try {
+                System.out.println(todoService.getAllTaskIds());
                 System.out.println("Enter the ID of the task you want to delete:");
                 String idString = scanner.nextLine();
                 UUID id = UUID.fromString(idString);
