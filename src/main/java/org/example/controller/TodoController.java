@@ -9,6 +9,7 @@ import org.example.service.UserService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
@@ -106,9 +107,13 @@ public class TodoController {
     private void addTask() {
         try {
             System.out.println(userService.getAllUserIds());
+
+            String createdBy = user.getUserName();
+
             System.out.println("Enter the ID of the user to assign the task:");
             String userIdString = scanner.nextLine();
             UUID assignedTo = UUID.fromString(userIdString);
+
 
             System.out.println("Enter title:");
             String title = scanner.nextLine();
@@ -117,8 +122,15 @@ public class TodoController {
             String description = scanner.nextLine();
 
             System.out.println("Enter start date (dd/MM/yyyy):");
-            String startDateInput = scanner.nextLine();
-            LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
+            String startDateInpu = scanner.nextLine();
+//            LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
+            LocalDate startDate = null;
+            try {
+                startDate = LocalDate.parse(startDateInpu, dateFormatter);
+                // startDate'ı TodoDTO oluştururken kullan
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date format. Please enter the date in the format dd/MM/yyyy.");
+            }
 
             Todo newTodo = Todo.builder()
                     .assignedTo(assignedTo)
@@ -127,13 +139,14 @@ public class TodoController {
                     .status(Status.PROGRESS)
                     .priority(Priority.MEDIUM)
                     .created(startDate)
+                    .createdBy(createdBy)
                     .build();
             newTodo.setCreatedBy(user.getUserName());
 
             todoService.addTask(newTodo);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            System.out.println("Invalid date format. Please enter date in dd/MM/yyyy format.");
+            System.out.println("Invalid");
         }
     }
 
@@ -178,26 +191,22 @@ public class TodoController {
                 System.out.println("Enter new status( PROGRESS, COMPLETED, HOLD):");
                 String newStatusString = scanner.nextLine();
 
-                Status newStatus= null;
-                try {
-                    newStatus = Status.valueOf(newStatusString);
-                } catch (IllegalArgumentException ex) {
-                    System.out.println("Invalid priority. Please choose from LOW, MEDIUM, or HIGH.");
-                    return;
-                }
-
                 System.out.println("Enter new priority (LOW, MEDIUM, HIGH):");
                 String newPriorityString = scanner.nextLine();
 
+//                Status newStatus= null;
+//                try {
+//                    newStatus = Status.valueOf(newStatusString);
+//                } catch (IllegalArgumentException ex) {
+//                    System.out.println("Invalid priority. Please choose from LOW, MEDIUM, or HIGH.");
+//                    return;
+//                }
 
-                // Kullanıcının girdisini kontrol edin
-                if (newPriorityString.isEmpty() ) {
-                    System.out.println("Priority cannot be empty. Please try again.");
-                    return;
-                }
-
+//                if (newPriorityString.isEmpty() ) {
+//                    System.out.println("Priority cannot be empty. Please try again.");
+//                    return;
+//                }
                 Priority newPriority = Priority.valueOf(newPriorityString.toUpperCase());
-
                 try {
                     newPriority = Priority.valueOf(newPriorityString);
                 } catch (IllegalArgumentException ex) {
