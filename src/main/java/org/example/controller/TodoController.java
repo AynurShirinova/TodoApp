@@ -4,6 +4,7 @@ import org.example.domain.Status;
 import org.example.domain.Todo;
 import org.example.domain.User;
 import org.example.dto.TodoDTO;
+import org.example.dto.TodoDateInputsDTO;
 import org.example.service.TodoService;
 import org.example.service.UserService;
 
@@ -77,7 +78,7 @@ public class TodoController {
             System.out.println("Enter the ID of the user to list tasks for:");
             String userIdString = scanner.nextLine();
             UUID userId = UUID.fromString(userIdString);
-            List<Todo> assignedTasks = todoService.listTasksByAssignedTo(userId);
+            List<TodoDTO> assignedTasks = todoService.listTasksByAssignedTo(userId);
             if (assignedTasks.isEmpty()) {
                 System.out.println("No tasks assigned to user with ID " + userId);
             } else {
@@ -161,19 +162,19 @@ public class TodoController {
             System.out.println("Enter end date (dd/MM/yyyy):");
             String endDateInput = scanner.nextLine();
             LocalDate endDate = LocalDate.parse(endDateInput, dateFormatter);
-            List<Todo> filteredTodos = todoService.getTodosBetweenDates(startDate, endDate);
+            List<TodoDTO> filteredTodos = todoService.getTodosBetweenDates(startDate, endDate);
             printTodos(filteredTodos);
         } catch (Exception e) {
             System.out.println("Invalid date format. Please enter date in dd/MM/yyyy format.");
         }
 
     }
-      private void printTodos(List<Todo> todos) {
+      private void printTodos(List<TodoDTO> todos) {
             if (todos.isEmpty()) {
                 System.out.println("No tasks found.");
             } else {
                 System.out.println("Tasks:");
-                for (Todo todo : todos) {
+                for (TodoDTO todo : todos) {
                     System.out.println(todo);
                 }
             }
