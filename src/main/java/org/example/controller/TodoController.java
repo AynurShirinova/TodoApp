@@ -109,6 +109,7 @@ public class TodoController {
             System.out.println(userService.getAllUserIds());
 
             String createdBy = user.getUserName();
+            System.out.println(createdBy);
 
             System.out.println("Enter the ID of the user to assign the task:");
             String userIdString = scanner.nextLine();
@@ -123,10 +124,11 @@ public class TodoController {
 
             System.out.println("Enter start date (dd/MM/yyyy):");
             String startDateInpu = scanner.nextLine();
+            String pattern = "yyyy-MM-dd";
 //            LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
             LocalDate startDate = null;
             try {
-                startDate = LocalDate.parse(startDateInpu, dateFormatter);
+                startDate = LocalDate.parse(startDateInpu, DateTimeFormatter.ofPattern(pattern));
                 // startDate'ı TodoDTO oluştururken kullan
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date format. Please enter the date in the format dd/MM/yyyy.");
@@ -142,7 +144,6 @@ public class TodoController {
                     .createdBy(createdBy)
                     .build();
             newTodo.setCreatedBy(user.getUserName());
-
             todoService.addTask(newTodo);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
