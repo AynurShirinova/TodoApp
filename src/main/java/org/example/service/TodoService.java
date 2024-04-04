@@ -33,17 +33,17 @@ public class TodoService {
         return todoRepository.readTasks();
     }
 
-    public List<Todo> findByAssignedTo(UUID todo) {
+    public List<TodoDTO> findByAssignedTo(UUID todo) {
         return todoRepository.findByAssignedTo(todo);
     }
 
-    public List<Todo> getTodosBetweenDates(LocalDate start, LocalDate end) {
+    public List<TodoDTO> getTodosBetweenDates(LocalDate start, LocalDate end) {
         return todoRepository.getTodosBetweenDates(start, end);
     }
-    public Todo getTaskById(UUID id) {
+    public TodoDTO getTaskById(UUID id) {
         return todoRepository.getTodoById(id).orElse(null);
     }
-    public List<Todo> listTasksByAssignedTo(UUID userId) {
+    public List<TodoDTO> listTasksByAssignedTo(UUID userId) {
         return todoRepository.findByAssignedTo(userId);
     }
     public Map<UUID, String> getAllTaskIds() {
