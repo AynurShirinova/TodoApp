@@ -56,6 +56,7 @@ public class UserController {
                 .password(password)
                 .build();
         userService.logUp(user);
+        System.out.println(user.getUserName());
     }
 
     private void logIn() {
