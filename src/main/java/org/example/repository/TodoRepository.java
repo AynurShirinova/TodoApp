@@ -75,6 +75,7 @@ public class TodoRepository   {
                             .status(Status.valueOf(resultSet.getString("status")))
                             // .priority(Priority.valueOf(resultSet.getString("priority")))
                             .priority(getPriority(resultSet.getString("priority")))
+                            .created(resultSet.getString("created"))
                             .assignedTo(UUID.fromString(resultSet.getString("assigned_to")))
                             .build();
                     todos.add(todo);
