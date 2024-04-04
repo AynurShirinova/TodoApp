@@ -28,7 +28,7 @@ public class Todo {
      Status status;
      Priority priority;
      LocalDate created;
-    LocalDate endDateInput;
-    LocalDate startDateInput;
+//    LocalDate endDateInput;
+//    LocalDate startDateInput;
 
 }
