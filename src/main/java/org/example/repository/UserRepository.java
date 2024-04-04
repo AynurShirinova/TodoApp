@@ -2,7 +2,10 @@ package org.example.repository;
 
 import org.example.Main;
 import org.example.database.DatabaseManager;
+import org.example.domain.Status;
 import org.example.domain.User;
+import org.example.dto.TodoDTO;
+import org.example.dto.UsersDTO;
 import org.example.utils.CoreUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -64,6 +67,28 @@ public class UserRepository {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<UsersDTO> getUsernameAndID(UUID userid) {
+        List<UsersDTO> users = new ArrayList<>();
+
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (Connection connection = DatabaseManager.connect();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             //statement.setObject(1,userid);
+             ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                UsersDTO user = UsersDTO.builder()
+                        .id(UUID.fromString(resultSet.getString("id")))
+                        .userName(resultSet.getString("user_name"))
+                        .build();
+                users.add(user);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     public String getUsernameById(UUID uuid) {
