@@ -26,8 +26,6 @@ public class TodoRepository   {
                 statement.setObject(6, todo.getCreated());
                 statement.setString(7, todo.getCreatedBy());
                 statement.setString(8, todo.getPriority().toString());
-
-
                 statement.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -100,18 +98,28 @@ public class TodoRepository   {
     }
 
 
-        public Optional<Todo> getTodoById(UUID id) {
+        public Optional<TodoDTO> getTodoById(UUID id) {
             String sql = "SELECT * FROM todos WHERE id = ?";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, id.toString());
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        return Optional.of(Todo.builder()
+                        return Optional.of(TodoDTO.builder()
+//                                .id(UUID.fromString(resultSet.getString("id")))
+//                                .title(resultSet.getString("title"))
+//                                .description(resultSet.getString("description"))
+//                                .status(Status.valueOf(resultSet.getString("status")))
+//                                .assignedTo(UUID.fromString(resultSet.getString("assigned_to")))
+//                                .build());
                                 .id(UUID.fromString(resultSet.getString("id")))
+                                .createdBy(resultSet.getString("created_by"))
                                 .title(resultSet.getString("title"))
                                 .description(resultSet.getString("description"))
                                 .status(Status.valueOf(resultSet.getString("status")))
+                                // .priority(Priority.valueOf(resultSet.getString("priority")))
+                                .priority(getPriority(resultSet.getString("priority")))
+                                .created(resultSet.getString("created"))
                                 .assignedTo(UUID.fromString(resultSet.getString("assigned_to")))
                                 .build());
                     }
@@ -122,20 +130,23 @@ public class TodoRepository   {
             return Optional.empty();
         }
 
-        public List<Todo> findByAssignedTo(UUID todo) {
-            List<Todo> todos = new ArrayList<>();
+        public List<TodoDTO> findByAssignedTo(UUID todo) {
+            List<TodoDTO> todos = new ArrayList<>();
             String sql = "SELECT * FROM todos WHERE assigned_to = ?";
             try (Connection connection = DatabaseManager.connect();
                  PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.setString(1, todo.toString());
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        Todo todoss = Todo.builder()
+                        TodoDTO todoss = TodoDTO.builder()
                                 .id(UUID.fromString(resultSet.getString("id")))
                                 .title(resultSet.getString("title"))
                                 .description(resultSet.getString("description"))
                                 .status(Status.valueOf(resultSet.getString("status")))
                                 .assignedTo(UUID.fromString(resultSet.getString("assigned_to")))
+                                .priority(getPriority(resultSet.getString("priority")))
+                                .created(resultSet.getString("created"))
+                                .createdBy(resultSet.getString("created_by"))
                                 .build();
                         todos.add(todoss);
                     }
@@ -145,8 +156,8 @@ public class TodoRepository   {
             }
             return todos;
         }
-    public List<Todo> getTodosBetweenDates(LocalDate start, LocalDate end) {
-        List<Todo> todos = new ArrayList<>();
+    public List<TodoDTO> getTodosBetweenDates(LocalDate start, LocalDate end) {
+        List<TodoDTO> todos = new ArrayList<>();
         String sql = "SELECT * FROM todos WHERE created BETWEEN ? AND ?";
         try (Connection connection = DatabaseManager.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -157,19 +168,22 @@ public class TodoRepository   {
                     UUID id = UUID.fromString(resultSet.getString("id"));
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
-                    LocalDate created = resultSet.getDate("created").toLocalDate();
+                    //LocalDate created = resultSet.getDate("created").toLocalDate();
+                    String created = resultSet.getString("created");
                     Status status = Status.valueOf(resultSet.getString("status"));
                     UUID assignedTo = UUID.fromString(resultSet.getString("assigned_to"));
-
-                    Todo todo = Todo.builder()
+                    Priority priority = Priority.valueOf(resultSet.getString("priority"));
+                    String createdBy = resultSet.getString("created_by");
+                    TodoDTO todo = TodoDTO.builder()
                             .id(id)
                             .title(title)
                             .description(description)
                             .created(created)
                             .status(status)
+                            .priority(priority)
                             .assignedTo(assignedTo)
+                            .createdBy(createdBy)
                             .build();
-
                     todos.add(todo);
                 }
             }
