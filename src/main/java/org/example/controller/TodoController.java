@@ -1,13 +1,12 @@
 package org.example.controller;
+
 import org.example.domain.Priority;
 import org.example.domain.Status;
 import org.example.domain.Todo;
 import org.example.domain.User;
 import org.example.dto.TodoDTO;
-import org.example.dto.TodoDateInputsDTO;
 import org.example.service.TodoService;
 import org.example.service.UserService;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -43,7 +42,6 @@ public class TodoController {
                 System.out.print("Enter your choice: ");
                 choice = scanner.nextLine().trim();
 
-
                 switch (choice) {
                     case "1":
                         addTask();
@@ -75,6 +73,7 @@ public class TodoController {
 
     private void listTasksByAssignedTo() {
         try {
+            System.out.println(userService.getAllUserIds());
             System.out.println("Enter the ID of the user to list tasks for:");
             String userIdString = scanner.nextLine();
             UUID userId = UUID.fromString(userIdString);
@@ -126,7 +125,7 @@ public class TodoController {
             System.out.println("Enter start date (dd/MM/yyyy):");
             String startDateInpu = scanner.nextLine();
             String pattern = "yyyy-MM-dd";
-//            LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
+          //  LocalDate startDate = LocalDate.parse(startDateInpu, dateFormatter);
             LocalDate startDate = null;
             try {
                 startDate = LocalDate.parse(startDateInpu, DateTimeFormatter.ofPattern(pattern));
@@ -155,19 +154,27 @@ public class TodoController {
     private void askUserForDateRangeAndPrintTodos() {
         try {
             System.out.println("Enter start date (dd/MM/yyyy):");
-
             String startDateInput = scanner.nextLine();
             LocalDate startDate = LocalDate.parse(startDateInput, dateFormatter);
 
             System.out.println("Enter end date (dd/MM/yyyy):");
             String endDateInput = scanner.nextLine();
             LocalDate endDate = LocalDate.parse(endDateInput, dateFormatter);
+
+            if (startDate.isAfter(endDate)) {
+                System.out.println("Start date cannot be after end date.");
+                return;
+            }
             List<TodoDTO> filteredTodos = todoService.getTodosBetweenDates(startDate, endDate);
             printTodos(filteredTodos);
-        } catch (Exception e) {
+
+        } catch (DateTimeParseException e) {
             System.out.println("Invalid date format. Please enter date in dd/MM/yyyy format.");
         }
-
+     catch (Exception e) {
+        System.out.println("An unexpected error occurred.");
+        e.printStackTrace();
+    }
     }
       private void printTodos(List<TodoDTO> todos) {
             if (todos.isEmpty()) {
@@ -187,6 +194,7 @@ public class TodoController {
 
                 System.out.println("Enter new title:");
                 String newTitle = scanner.nextLine();
+
                 System.out.println("Enter new description:");
                 String newDescription = scanner.nextLine();
 
@@ -247,8 +255,5 @@ public class TodoController {
                 System.out.println("Invalid input. Please try again.");
             }
         }
-
-
-
     }
 
