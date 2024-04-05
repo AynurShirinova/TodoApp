@@ -10,6 +10,7 @@ import org.example.utils.CoreUtils;
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @SuppressWarnings("ALL")
@@ -169,7 +170,9 @@ public class TodoRepository   {
                     String title = resultSet.getString("title");
                     String description = resultSet.getString("description");
                     //LocalDate created = resultSet.getDate("created").toLocalDate();
-                    String created = resultSet.getString("created");
+                   //  String created = resultSet.getString("created");
+                    String createdStr = resultSet.getString("created"); // Veritabanından tarih olarak bir dize alıyoruz
+                    LocalDate created = LocalDate.parse(createdStr, DateTimeFormatter.ofPattern("dd/MM/yyyy")); // Dizeyi LocalDate nesnesine dönüştürüyoruz
                     Status status = Status.valueOf(resultSet.getString("status"));
                     UUID assignedTo = UUID.fromString(resultSet.getString("assigned_to"));
                     Priority priority = Priority.valueOf(resultSet.getString("priority"));
@@ -178,7 +181,7 @@ public class TodoRepository   {
                             .id(id)
                             .title(title)
                             .description(description)
-                            .created(created)
+                            .created(String.valueOf(created))
                             .status(status)
                             .priority(priority)
                             .assignedTo(assignedTo)
