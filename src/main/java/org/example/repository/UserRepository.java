@@ -2,9 +2,7 @@ package org.example.repository;
 
 import org.example.Main;
 import org.example.database.DatabaseManager;
-import org.example.domain.Status;
 import org.example.domain.User;
-import org.example.dto.TodoDTO;
 import org.example.dto.UsersDTO;
 import org.example.utils.CoreUtils;
 import java.sql.Connection;
