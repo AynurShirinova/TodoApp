@@ -73,7 +73,7 @@ public class TodoController {
 
     private void listTasksByAssignedTo() {
         try {
-            System.out.println(userService.getAllUserIds());
+//            System.out.println(userService.getAllUserIds());
             System.out.println("Enter the ID of the user to list tasks for:");
             String userIdString = scanner.nextLine();
             UUID userId = UUID.fromString(userIdString);
@@ -106,7 +106,7 @@ public class TodoController {
 
     private void addTask() {
         try {
-            System.out.println(userService.getAllUserIds());
+//            System.out.println(userService.getAllUserIds());
 
             String createdBy = user.getUserName();
             System.out.println(createdBy);
