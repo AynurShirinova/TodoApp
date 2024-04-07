@@ -56,7 +56,7 @@ public class ProjectController {
 
         if (selectedProject != null) {
             System.out.println("Şu anki proje: " + selectedProject.getTitle());
-            new Main().todoController.run();
+//            new Main().todoController.run();
         } else {
             System.out.println("Proje bulunamadı.");
         }
