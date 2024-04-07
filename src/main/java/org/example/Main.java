@@ -1,35 +1,30 @@
 package org.example;
 
+import lombok.AllArgsConstructor;
 import org.example.controller.ProjectController;
-import org.example.controller.TodoController;
 import org.example.controller.UserController;
 import org.example.domain.User;
 import org.example.repository.ProjectRepository;
 import org.example.repository.TodoRepository;
-import org.example.repository.UserRepository;
 import org.example.service.ProjectService;
 import org.example.service.TodoService;
-import org.example.service.UserService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SuppressWarnings("ALL")
+@SpringBootApplication
+@EnableDiscoveryClient
+@AllArgsConstructor
+@EnableWebMvc
+@EntityScan(basePackages = {"org.example.domain"})
+@EnableJpaRepositories(basePackages = {"org.example.repository"})
 public class Main {
-
-        // Repository sınıflarının oluşturulması
-        TodoRepository todoRepository = new TodoRepository();
-        ProjectRepository projectRepository = new ProjectRepository();
-        UserRepository userRepository = new UserRepository();
-
-        // Service sınıflarının oluşturulması
-        User user=new User();
-        UserService userService = new UserService(userRepository);
-        TodoService todoService = new TodoService(todoRepository);
-        ProjectService projectService = new ProjectService(projectRepository, todoService);
-
-        public TodoController todoController = new TodoController(user, userService, todoService);
-        public ProjectController projectController = new ProjectController(projectService);
-        UserController userController = new UserController(userService);
+    private final UserController userController;
     public static void main(String[] args) {
-        // Kullanıcı arayüzünün başlatılması
-        new Main().userController.loging();
+        SpringApplication.run(Main.class,args);
     }
 }
